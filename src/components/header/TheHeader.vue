@@ -12,7 +12,10 @@
         icon="menu"
       />
 
-      <q-toolbar-title>
+      <q-toolbar-title
+        @click="$router.push('/')"
+        class="cursor-pointer"
+      >
         Помощь животным
       </q-toolbar-title>
       <q-space />
@@ -27,9 +30,25 @@
           exact
         />
       </q-tabs>
-      <div class="text-white q-gutter-md q-mx-md" style="font-size: 1.5em">
-        <q-icon name="add" class="cursor-pointer"/>
-        <q-icon name="login" class="cursor-pointer"/>
+      <div
+        class="text-white q-gutter-md q-mx-md"
+        style="font-size: 1.5em">
+        <q-icon
+          name="add"
+          class="cursor-pointer"
+        />
+        <q-icon
+          v-if="isAuth"
+          name="login"
+          class="cursor-pointer"
+          @click="$router.push('/login')"
+        />
+        <q-icon
+          v-else
+          name="logout"
+          class="cursor-pointer"
+          @click="logout"
+        />
       </div>
     </q-toolbar>
   </q-header>
@@ -66,11 +85,18 @@
 <script>
 
 import { ref } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
   name: 'TheHeader',
 
   setup () {
+    const store = useStore()
+
+    const isAuth = store.getters['auth/isAuthenticated']
+    const logout = () => {
+      store.commit('auth/logout')
+    }
     const links = [
       {
         name: 'applications',
@@ -91,7 +117,9 @@ export default {
 
     return {
       leftDrawerOpen: ref(false),
-      links
+      links,
+      isAuth,
+      logout
     }
   }
 }

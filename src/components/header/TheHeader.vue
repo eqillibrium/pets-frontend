@@ -30,6 +30,17 @@
           exact
         />
       </q-tabs>
+      <q-tabs
+        shrink
+      >
+        <q-route-tab
+          v-if="isAdmin"
+          name="admin"
+          label="админка"
+          to="/admin"
+          exact
+        />
+      </q-tabs>
       <div
         class="text-white q-gutter-md q-mx-md"
         style="font-size: 1.5em">
@@ -38,7 +49,7 @@
           class="cursor-pointer"
         />
         <q-icon
-          v-if="isAuth"
+          v-if="!isAuth"
           name="login"
           class="cursor-pointer"
           @click="$router.push('/login')"
@@ -84,7 +95,7 @@
 
 <script>
 
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
@@ -93,9 +104,10 @@ export default {
   setup () {
     const store = useStore()
 
-    const isAuth = store.getters['auth/isAuthenticated']
-    const logout = () => {
-      store.commit('auth/logout')
+    const isAuth = computed(() => store.getters['auth/isAuthenticated'])
+    const isAdmin = computed(() => store.getters['auth/isAdmin'])
+    const logout = async () => {
+      await store.dispatch('auth/logout')
     }
     const links = [
       {
@@ -107,11 +119,6 @@ export default {
         name: 'about',
         text: 'Информация',
         to: '/about'
-      },
-      {
-        name: 'admin',
-        text: 'Админ',
-        to: '/admin'
       }
     ]
 
@@ -119,6 +126,7 @@ export default {
       leftDrawerOpen: ref(false),
       links,
       isAuth,
+      isAdmin,
       logout
     }
   }

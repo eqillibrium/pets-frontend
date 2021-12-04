@@ -1,10 +1,114 @@
 <template>
-  <h1>This is an admin page</h1>
+  <div class="row">
+    <div class="col-3">
+      <div class="q-pa-md">
+        <q-list
+          bordered
+          padding
+          class="rounded-borders text-primary"
+        >
+          <q-item
+            clickable
+            v-ripple
+            @click="getData"
+            active-class="my-menu-link"
+          >
+            <q-item-section
+              avatar
+            >
+              <q-icon
+                name="group"
+              />
+            </q-item-section>
+
+            <q-item-section>Пользователи</q-item-section>
+          </q-item>
+
+          <!--      <q-separator spaced />-->
+
+          <q-item
+            clickable
+            v-ripple
+            @click="link = 'outbox'"
+            active-class="my-menu-link"
+          >
+            <q-item-section avatar>
+              <q-icon name="apps" />
+            </q-item-section>
+
+            <q-item-section>Заявки</q-item-section>
+          </q-item>
+
+        </q-list>
+      </div>
+    </div>
+    <div class="col-8">
+      <div class="q-pa-md d-flex">
+        <q-table
+          title="Список пользователей"
+          row-key="name"
+          :columns="columns"
+          :rows="users"
+          :pagination="{ rowsPerPage: 3 }"
+          v-if="!loading"
+          @row-click="getData"
+        />
+        <div class="q-pa-md" v-else>
+          <div class="q-gutter-md row items-center justify-center q-mt-xl">
+            <q-spinner-cube
+              size="25%"
+              color="primary"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import { ref, onBeforeMount } from 'vue'
+
 export default {
-  name: 'Admin.vue'
+  name: 'Admin.vue',
+  setup () {
+    const loading = ref(false)
+    const columns = [
+      {
+        name: 'name',
+        required: true,
+        label: 'Пользователь',
+        align: 'left',
+        field: row => row.name,
+        format: val => `${val}`,
+        sortable: true
+      },
+      { name: 'email', align: 'center', label: 'email', field: 'email', sortable: true },
+      { name: 'phone', align: 'center', label: 'phone', field: 'phone', sortable: true },
+      { name: 'users_role', align: 'center', label: 'users_role', field: 'users_role', sortable: true }
+    ]
+    const users = ref([])
+    const getData = () => {
+      console.log(users.value)
+    }
+    onBeforeMount(async () => {
+      try {
+        loading.value = true
+        const response = await fetch('http://localhost:80/api/users')
+        const data = await response.json()
+        users.value = data.data
+        console.log('success')
+        loading.value = false
+      } catch (e) {
+      }
+    })
+    return {
+      getData,
+      users,
+      columns,
+      loading
+    }
+  }
 }
 </script>
 

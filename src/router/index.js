@@ -34,6 +34,15 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
   },
   {
+    path: '/register',
+    name: 'Register',
+    meta: {
+      layout: 'main',
+      auth: false
+    },
+    component: () => import(/* webpackChunkName: "about" */ '../views/Register.vue')
+  },
+  {
     path: '/about',
     name: 'About',
     meta: {
@@ -62,9 +71,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const requireAuth = to.meta.auth
 
-  if (requireAuth && store.getters['auth/isAuthenticated']) {
+  if (requireAuth && store.getters['auth/isAdmin']) {
     next()
-  } else if (requireAuth && !store.getters['auth/isAuthenticated']) {
+  } else if (requireAuth && !store.getters['auth/isAdmin']) {
     next('/login?message=auth')
   } else {
     next()

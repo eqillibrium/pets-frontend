@@ -47,11 +47,11 @@
 
           <div>
             <q-btn
-              label="Submit"
+              label="Войти"
               type="submit"
               color="primary"/>
             <q-btn
-              label="Reset"
+              label="Сбросить"
               type="reset"
               color="primary"
               flat class="q-ml-sm" />
@@ -62,16 +62,14 @@
 </template>
 
 <script>
-import { useQuasar } from 'quasar'
 import { computed, reactive } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
+import { Message } from '../utils/Message'
 
 export default {
   setup () {
-    const $q = useQuasar()
     const route = useRoute()
-    const router = useRouter()
     const store = useStore()
 
     const userData = reactive({
@@ -85,12 +83,7 @@ export default {
     })
 
     if (message.value === 'auth') {
-      $q.notify({
-        color: 'red-5',
-        textColor: 'white',
-        icon: 'warning',
-        message: 'Недостаточно прав. Авторизуйтесь'
-      })
+      Message.warning('Недостаточно прав. Авторизуйтесь')
     }
 
     return {
@@ -101,24 +94,8 @@ export default {
       async onSubmit () {
         try {
           await store.dispatch('auth/login', userData)
-          if (!store.getters.isError) {
-            await router.push('/')
-            $q.notify({
-              color: 'green-5',
-              textColor: 'white',
-              icon: 'success',
-              message: 'авторизация прошла успешно!'
-            })
-          } else {
-            $q.notify({
-              color: 'red-5',
-              textColor: 'white',
-              icon: 'warning',
-              message: store.getters.errorMessage
-            })
-          }
         } catch (e) {
-          console.log()
+          console.log(e)
         }
       },
 

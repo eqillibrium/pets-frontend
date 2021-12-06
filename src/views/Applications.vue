@@ -78,22 +78,24 @@
 </template>
 
 <script>
-import AppList from '@/components/list/AppList.vue'
 import { onBeforeMount, ref } from 'vue'
+import { useStore } from 'vuex'
+import AppList from '@/components/list/AppList.vue'
 
 export default {
   components: {
     AppList
   },
   setup () {
+    const store = useStore()
+
     const loading = ref(false)
     const apps = ref([])
     onBeforeMount(async () => {
       try {
         loading.value = true
-        const response = await fetch('http://localhost:80/api/list')
-        const data = await response.json()
-        apps.value = data.data
+        await store.dispatch('apps/getApps')
+        apps.value = await store.getters['apps/apps']
         console.log('success')
         loading.value = false
       } catch (e) {

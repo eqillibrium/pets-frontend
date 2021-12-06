@@ -44,6 +44,31 @@
       <div
         class="text-white q-gutter-md q-mx-md"
         style="font-size: 1.5em">
+        <q-btn-dropdown
+          v-if="isAuth"
+          color="secondary"
+          label="Мой профиль"
+          dropdown-icon="change_history">
+          <q-list>
+            <q-item clickable v-close-popup>
+              <q-item-section>
+                <q-item-label>Photos</q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-close-popup>
+              <q-item-section>
+                <q-item-label>Videos</q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item clickable v-close-popup>
+              <q-item-section>
+                <q-item-label>Articles</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
         <q-icon
           name="add"
           class="cursor-pointer"
@@ -97,17 +122,26 @@
 
 import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { Message } from '@/utils/Message'
 
 export default {
   name: 'TheHeader',
 
   setup () {
     const store = useStore()
+    const router = useRouter()
 
     const isAuth = computed(() => store.getters['auth/isAuthenticated'])
     const isAdmin = computed(() => store.getters['auth/isAdmin'])
     const logout = async () => {
-      await store.dispatch('auth/logout')
+      try {
+        await store.dispatch('auth/logout')
+        Message.success('Вы вышли из системы')
+        await router.push('/login')
+      } catch (e) {
+        console.log(e)
+      }
     }
     const links = [
       {

@@ -73,11 +73,11 @@
 
         <div>
           <q-btn
-            label="Submit"
+            label="Подтвердить"
             type="submit"
             color="primary"/>
           <q-btn
-            label="Reset"
+            label="Очистить поля"
             type="reset"
             color="primary"
             flat class="q-ml-sm" />
@@ -88,14 +88,13 @@
 </template>
 
 <script>
-import { useQuasar } from 'quasar'
 import { computed, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import { Message } from '../utils/Message'
 
 export default {
   setup () {
-    const $q = useQuasar()
     const route = useRoute()
     const router = useRouter()
     const store = useStore()
@@ -108,10 +107,6 @@ export default {
       accept: false
     })
 
-    // const name = ref(null)
-    // const email = ref(null)
-    // const password = ref(null)
-    // const accept = ref(false)
     const message = computed(() => route.query.message)
     const isLogin = computed(() => {
       console.log(route.name)
@@ -119,12 +114,7 @@ export default {
     })
 
     if (message.value === 'auth') {
-      $q.notify({
-        color: 'red-5',
-        textColor: 'white',
-        icon: 'warning',
-        message: 'Недостаточно прав. Авторизуйтесь'
-      })
+      Message.warning('Недостаточно прав. Авторизуйтесь')
     }
 
     return {
@@ -136,33 +126,12 @@ export default {
 
       async onSubmit () {
         if (userData.accept !== true) {
-          $q.notify({
-            color: 'red-5',
-            textColor: 'white',
-            icon: 'warning',
-            message: 'Сначала Вам нужно принять условия пользовательского соглашения'
-          })
+          Message.warning('Сначала Вам нужно принять условия пользовательского соглашения')
         } else {
           try {
             await store.dispatch('auth/register', userData)
-            if (!store.getters.isError) {
-              await router.push('/')
-              $q.notify({
-                color: 'green-5',
-                textColor: 'white',
-                icon: 'success',
-                message: 'авторизация прошла успешно!'
-              })
-            } else {
-              $q.notify({
-                color: 'red-5',
-                textColor: 'white',
-                icon: 'warning',
-                message: store.getters.errorMessage
-              })
-            }
           } catch (e) {
-            console.log()
+            console.log(e)
           }
         }
       },

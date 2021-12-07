@@ -8,31 +8,22 @@ export default {
   namespaced: true,
   root: true,
   state: {
-    user: localStorage.getItem(USER_KEY),
-    token: localStorage.getItem(TOKEN_KEY),
-    role: 'guest',
-    isAdmin: false
+    user: JSON.parse(localStorage.getItem(USER_KEY)),
+    token: localStorage.getItem(TOKEN_KEY)
   },
   mutations: {
     setUser (state, user) {
       state.user = user
-      localStorage.setItem(USER_KEY, user)
+      localStorage.setItem(USER_KEY, JSON.stringify(user))
     },
     setToken (state, token) {
       state.token = token
       localStorage.setItem(TOKEN_KEY, token)
     },
-    setRole (state, role) {
-      state.role = role
-    },
-    setAdmin (state, value) {
-      state.isAdmin = value
-    },
     logout (state) {
       state.user = null
       state.token = null
-      state.role = 'guest'
-      state.isAdmin = false
+
       localStorage.removeItem(TOKEN_KEY)
       localStorage.removeItem(USER_KEY)
     }
@@ -44,8 +35,7 @@ export default {
         console.log(userData)
         const { data } = await axios.post('/login', userData)
         commit('setToken', data.token)
-        commit('setRole', data.data.users_role)
-        //   commit('setAdmin', data.data.is_admin)
+        commit('setUser', data.data)
       } catch (e) {
         console.log(e.message)
       }
@@ -56,8 +46,7 @@ export default {
         const { data } = await axios.post('/register', userData)
 
         commit('setToken', data.token)
-        commit('setRole', data.data?.users_role)
-        commit('setAdmin', data.data?.is_admin)
+        commit('setUser', data.data)
 
         let message = ''
         for (const key in data.errors) {
@@ -93,16 +82,16 @@ export default {
   },
   getters: {
     user (state) {
-      return state.user
+      return state?.user
     },
     token (state) {
-      return state.token
+      return state?.token
     },
     isAuthenticated (_, getters) {
       return !!getters.token
     },
     isAdmin (state) {
-      return state.isAdmin
+      return state.user?.is_admin
     }
   }
 }

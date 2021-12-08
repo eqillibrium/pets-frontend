@@ -1,8 +1,8 @@
 <template>
   <div class="q-pa-md row q-gutter-xl content-center justify-center">
     <q-intersection
-      transition="scale"
-      class="col-3 example-item"
+      transition="fade"
+      class="col-2 example-item"
       v-for="app in apps"
       :key="app.id">
       <ListItem :app="app"/>

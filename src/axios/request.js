@@ -10,6 +10,7 @@ const requestAxios = axios.create({
 
 requestAxios.interceptors.response.use(response => {
   if (response.status === 201) {
+    console.log(response)
     Message.success('Успешно!')
     router.replace({
       path: '/',

@@ -59,7 +59,7 @@
           </q-list>
         </div>
       </div>
-      <div class="col-8">
+      <div class="col-9">
         <AppList :apps="apps" v-if="!loading"/>
         <div class="q-pa-md" v-else>
           <div class="q-gutter-md row items-center justify-center q-mt-xl">
@@ -71,9 +71,6 @@
         </div>
       </div>
     </div>
-    <pre>
-      {{ apps }}
-    </pre>
   </q-page>
 </template>
 

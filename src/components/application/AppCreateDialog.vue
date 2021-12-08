@@ -1,31 +1,43 @@
 <template>
   <q-dialog>
-    <div class="q-pa-md bg-white" style="max-width: 400px">
+    <div class="q-pa-md bg-white">
     <q-form
       class="q-gutter-md"
+      @submit="onSubmit"
+      @reset="onReset"
     >
       <q-input
         filled
-        label="Your name *"
-        hint="Name and surname"
+        label="Ориентировочный адрес *"
+        hint="Например, г. Сочи, ул. Горькова, д. 22"
         lazy-rules
-        :rules="[ val => val && val.length > 0 || 'Please type something']"
+        v-model="newApp.address"
+        :rules="[ val => val && val.length > 0 || 'Пожалуйста, укажите адрес']"
       />
 
       <q-input
         filled
-        type="number"
-        label="Your age *"
+        label="Что требуется сделать *"
+        hint="Например, отвезти котика к ветеринару"
         lazy-rules
+        v-model="newApp.description"
         :rules="[
-          val => val !== null && val !== '' || 'Please type your age',
-          val => val > 0 && val < 100 || 'Please type a real age'
+          val => val && val.length > 0 && val.length < 100 || 'Укажите, что требуется сделать  '
         ]"
       />
 
+      <q-input
+        filled
+        label="Вознаграждение исполнителю *"
+        hint="Например, 1000 рублей "
+        lazy-rules
+        v-model="newApp.price"
+        :rules="[ val => val && val.length > 0 || 'Пожалуйста, предложите хоть что-то']"
+      />
+
       <div>
-        <q-btn label="Submit" type="submit" color="primary"/>
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+        <q-btn label="Создать" type="submit" color="primary"/>
+        <q-btn label="Очистить поля" type="reset" color="primary" flat class="q-ml-sm" />
       </div>
     </q-form>
     </div>
@@ -33,7 +45,34 @@
 </template>
 
 <script>
+import { reactive } from 'vue'
+import { useStore } from 'vuex'
+import { Message } from '@/utils/Message'
+
 export default {
-  props: ['text']
+  setup () {
+    const store = useStore()
+
+    const newApp = reactive({
+      address: 'г. Сочи, ул. Горькова, д. 22',
+      description: 'отвезти котика к ветеринару',
+      price: '1000 рублей'
+    })
+
+    return {
+      newApp,
+      onSubmit: async () => {
+        try {
+          await store.dispatch('apps/createApp', newApp)
+          Message.success('Заявка была успешно создана!')
+        } catch (e) {
+
+        }
+      },
+      onReset: () => {
+        console.log(newApp)
+      }
+    }
+  }
 }
 </script>

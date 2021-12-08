@@ -45,6 +45,7 @@
         class="text-white q-gutter-md q-mx-md"
         style="font-size: 1.5em">
         <q-icon
+          v-if="isAuth"
           name="add"
           class="cursor-pointer"
           @click="createApp = true"

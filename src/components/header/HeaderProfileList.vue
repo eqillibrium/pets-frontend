@@ -5,22 +5,36 @@
     label="Мой профиль"
     dropdown-icon="change_history">
     <q-list>
-      <q-item clickable v-close-popup>
+      <q-item
+        clickable
+        v-close-popup
+        exact
+        to="/profile"
+      >
         <q-item-section avatar>
           <q-avatar icon="person" color="primary" text-color="white" />
         </q-item-section>
-        <q-item-section>
+        <q-item-section
+        >
           <q-item-label>Профиль</q-item-label>
-          <q-item-label caption @click="show">{{ profile.name }}</q-item-label>
+          <q-item-label
+            caption
+          >{{ profile?.name }}
+          </q-item-label>
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-close-popup>
+      <q-item
+        clickable
+        v-close-popup
+        :to="{ name: 'UserApps'}"
+      >
         <q-item-section avatar>
           <q-avatar icon="assignment" color="secondary" text-color="white" />
         </q-item-section>
         <q-item-section>
-          <q-item-label>Заявки</q-item-label>
+          <q-item-label
+          >Заявки</q-item-label>
         </q-item-section>
       </q-item>
 
@@ -54,7 +68,8 @@ export default {
     const router = useRouter()
     const store = useStore()
 
-    const profile = store.getters['auth/user']
+    const profile = computed(() => store.getters['auth/user'])
+    const userApps = computed(() => store.getters['apps/getUserApps'])
     const show = () => {
       console.log(profile)
     }
@@ -76,7 +91,8 @@ export default {
       isAuth,
       logout,
       profile,
-      show
+      show,
+      userApps
     }
   }
 }

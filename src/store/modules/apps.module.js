@@ -5,14 +5,22 @@ export default {
   namespaced: true,
   root: true,
   state: {
-    apps: []
+    apps: [],
+    userApps: []
   },
   mutations: {
     fillApps (state, apps) {
       state.apps = apps
     },
+    addApp (state, app) {
+      state.apps.push(app)
+      state.userApps.push(app)
+    },
     clearApps (state) {
       state.apps = []
+    },
+    fillUserApps (state, apps) {
+      state.userApps = apps
     }
   },
   actions: {
@@ -24,15 +32,24 @@ export default {
         console.log(e)
       }
     },
-    async createApp ({ commit, dispatch, getters }, payload) {
+    async getUserAppsByID ({ commit, getters }) {
+      try {
+        const userID = getters.getUserID
+        const { data } = await axios.get(`/applications/users/${userID}`)
+        commit('fillUserApps', data.data)
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async createApp ({ commit, getters }, payload) {
       try {
         const userID = getters.getUserID
         const newApp = new Application({
           userID,
           ...payload
         })
-        const { data } = await axios.post('/applications', newApp)
-        console.log(data)
+        await axios.post('/applications', newApp)
+        commit('addApp', newApp)
       } catch (e) {
         console.log(e)
       }
@@ -44,6 +61,9 @@ export default {
     },
     getUserID (_, __, ___, rootGetters) {
       return rootGetters['auth/user'].id
+    },
+    getUserApps (state) {
+      return state.userApps
     }
   }
 }

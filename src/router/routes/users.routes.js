@@ -1,5 +1,5 @@
-// import auth from '../middleware/auth.middleware'
 import Home from '../../views/Home'
+import auth from '../middleware/auth.middleware'
 
 export default function () {
   return [
@@ -42,6 +42,28 @@ export default function () {
         layout: 'main'
       },
       component: () => import(/* webpackChunkName: "about" */ '@/views/Applications.vue')
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      meta: {
+        layout: 'main',
+        middleware: [
+          auth
+        ]
+      },
+      component: () => import(/* webpackChunkName: "about" */ '@/views/user/Profile.vue')
+    },
+    {
+      path: '/profile/applications',
+      name: 'UserApps',
+      component: () => import(/* webpackChunkName: "about" */ '@/views/user/Applications.vue'),
+      meta: {
+        layout: 'main',
+        middleware: [
+          auth
+        ]
+      }
     }
   ]
 }

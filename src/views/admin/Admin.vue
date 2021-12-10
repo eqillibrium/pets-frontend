@@ -49,7 +49,7 @@
           row-key="name"
           :columns="columns"
           :rows="users"
-          :pagination="{ rowsPerPage: 3 }"
+          :pagination="{ rowsPerPage: 10 }"
           v-if="!loading"
           @row-click="getData"
         />

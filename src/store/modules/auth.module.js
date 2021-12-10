@@ -9,7 +9,8 @@ export default {
   root: true,
   state: {
     user: JSON.parse(localStorage.getItem(USER_KEY)),
-    token: localStorage.getItem(TOKEN_KEY)
+    token: localStorage.getItem(TOKEN_KEY),
+    profile: null
   },
   mutations: {
     setUser (state, user) {
@@ -19,6 +20,9 @@ export default {
     setToken (state, token) {
       state.token = token
       localStorage.setItem(TOKEN_KEY, token)
+    },
+    setProfile (state, profile) {
+      state.profile = profile
     },
     logout (state) {
       state.user = null
@@ -47,15 +51,6 @@ export default {
 
         commit('setToken', data.token)
         commit('setUser', data.data)
-
-        let message = ''
-        for (const key in data.errors) {
-          message += key + ' - '
-          data.errors[key].forEach(el => {
-            message += el
-          })
-        }
-        console.log(message)
       } catch (e) {
         console.log(e)
       }
@@ -78,6 +73,16 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    async loadProfile ({ commit, getters }) {
+      try {
+        const user = getters.user
+        const ID = user.id
+        const { data } = await axios.get(`/users/profile/${ID}`)
+        commit('setProfile', data.data)
+      } catch (e) {
+        console.log(e)
+      }
     }
   },
   getters: {
@@ -92,6 +97,9 @@ export default {
     },
     isAdmin (state) {
       return state.user?.is_admin
+    },
+    getProfile (state) {
+      return state.profile
     }
   }
 }

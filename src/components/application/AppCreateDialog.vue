@@ -28,11 +28,12 @@
 
       <q-input
         filled
+        type="number"
         label="Вознаграждение исполнителю *"
-        hint="Например, 1000 рублей "
+        hint="Например, 1000"
         lazy-rules
         v-model="newApp.price"
-        :rules="[ val => val && val.length > 0 || 'Пожалуйста, предложите хоть что-то']"
+        :rules="[ val => val && val > 0 || 'Пожалуйста, предложите хоть что-то']"
       />
 
       <div>
@@ -56,7 +57,7 @@ export default {
     const newApp = reactive({
       address: 'г. Сочи, ул. Горькова, д. 22',
       description: 'отвезти котика к ветеринару',
-      price: '1000 рублей'
+      price: 1000
     })
 
     return {

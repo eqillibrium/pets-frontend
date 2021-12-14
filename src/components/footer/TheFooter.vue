@@ -1,6 +1,7 @@
-<template>
+<template >
   <q-footer
     reveal
+    style="background-color: #8A8DAF;"
   >
     <div class="row">
       <div class="col-4" v-for="a in 3" :key="a">

@@ -63,21 +63,21 @@
       </div>
     </div>
     <div class="col-9">
-        <div class="q-pa-md q-gutter-sm">
-          <q-breadcrumbs class="text-brown">
-            <template v-slot:separator>
-              <q-icon
-                size="1.5em"
-                name="chevron_right"
-                color="primary"
-              />
-            </template>
+      <div class="q-pa-md q-gutter-sm">
+        <q-breadcrumbs class="text-brown">
+          <template v-slot:separator>
+            <q-icon
+              size="1.5em"
+              name="chevron_right"
+              color="primary"
+            />
+          </template>
 
-            <q-breadcrumbs-el label="Главная" icon="home" to="/"/>
-            <q-breadcrumbs-el label="Профиль" icon="settings_accessibility" to="/profile"/>
-            <q-breadcrumbs-el label="Заявки" icon="format_list_bulleted" exact/>
-          </q-breadcrumbs>
-        </div>
+          <q-breadcrumbs-el label="Главная" icon="home" to="/"/>
+          <q-breadcrumbs-el label="Профиль" icon="settings_accessibility" to="/profile"/>
+          <q-breadcrumbs-el label="Заявки" icon="format_list_bulleted" exact/>
+        </q-breadcrumbs>
+      </div>
       <AppList :apps="apps" v-if="!loading"/>
       <div class="q-pa-md" v-else>
         <div class="q-gutter-md row items-center justify-center q-mt-xl">

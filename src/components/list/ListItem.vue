@@ -8,6 +8,7 @@
 
         <q-list>
           <q-badge color="orange" floating>{{app.status}}</q-badge>
+          <q-badge :color="!app.executor_user_id ? 'red' : 'green'">{{!app.executor_user_id ? 'Свободно' : 'В работе'}}</q-badge>
             <q-item clickable>
                 <q-item-section avatar>
                     <q-icon color="primary" name="room" />

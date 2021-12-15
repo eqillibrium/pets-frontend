@@ -56,7 +56,6 @@
           :settings="settings"
           :draggable="true"
           @map-was-initialized="initHandlers"
-          @click="info"
         >
           <ymap-marker
             v-for="marker in getMarkers"
@@ -110,7 +109,21 @@ export default {
 
     onBeforeMount(async () => {
       try {
-        await store.dispatch('apps/getApps')
+        if (store.getters['apps/apps'].length === 0) {
+          await store.dispatch('apps/getApps')
+        }
+        for (const app of apps.value) {
+          try {
+            const str1 = app.address.replaceAll(',', '')
+            const str2 = str1.replaceAll(' ', '+')
+            const { data } = await axios.get(`https://geocode-maps.yandex.ru/1.x/?format=json&apikey=bfdec8dc-bae1-4841-b07f-64fbc8c9c2c9&sco=latlong&geocode=${str2}`)
+            const coords = ((data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos).split(' ')).map(e => Number(e))
+            const reverseCoords = [coords[0], coords[1]] = [coords[1], coords[0]]
+            getMarkers.value.push({ id: Math.random() * 1000, coords: reverseCoords })
+          } catch (e) {
+            console.log(e)
+          }
+        }
       } catch (e) {
       }
     })
@@ -125,27 +138,7 @@ export default {
       settings,
       getMarkers,
       showMap: ref(false),
-      info: () => console.log(markers.value),
       initHandlers: async (e) => {
-        // markers.value = apps.value.map(e => {
-        //   return {
-        //     id: Math.random() * 1000,
-        //     coords: e.address
-        //   }
-        // })
-        for (const e of apps.value) {
-          try {
-            const str1 = e.address.replaceAll(',', '')
-            const str2 = str1.replaceAll(' ', '+')
-            const { data } = await axios.get(`https://geocode-maps.yandex.ru/1.x/?format=json&apikey=bfdec8dc-bae1-4841-b07f-64fbc8c9c2c9&sco=latlong&geocode=${str2}`)
-            // console.log(data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos)
-            const coords = ((data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos).split(' ')).map(e => Number(e))
-            const reverseCoords = [coords[0], coords[1]] = [coords[1], coords[0]]
-            getMarkers.value.push({ id: Math.random() * 1000, coords: reverseCoords })
-          } catch (e) {
-            console.log(e)
-          }
-        }
         e.events.add('click', async (e) => {
           getMarkers.value.push({ id: Math.random() * 1000, coords: e.get('coords') })
           const coords = e.get('coords')

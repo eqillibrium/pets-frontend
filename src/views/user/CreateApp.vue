@@ -156,8 +156,8 @@ export default {
         const coords = e.get('coords').join(',')
         console.log(coords)
         try {
-          const { data } = await axios.get(`https://geocode-maps.yandex.ru/1.x/?format=json&apikey=bfdec8dc-bae1-4841-b07f-64fbc8c9c2c9&sco=latlong&geocode=${coords}`)
-          console.log(data)
+          // const { data } = await axios.get(`https://geocode-maps.yandex.ru/1.x/?format=json&apikey=bfdec8dc-bae1-4841-b07f-64fbc8c9c2c9&sco=latlong&geocode=${coords}`)
+          console.log('click from getAddress')
         } catch (e) {
           console.log(e)
         }

@@ -2,7 +2,7 @@ module.exports = {
   pluginOptions: {
     quasar: {
       importStrategy: 'kebab',
-      rtlSupport: true
+      rtlSupport: true,
     }
   },
   transpileDependencies: [

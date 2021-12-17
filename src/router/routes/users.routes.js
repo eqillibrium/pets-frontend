@@ -75,6 +75,15 @@ export default function () {
           auth
         ]
       }
+    },
+    {
+      path: '/messages',
+      name: 'Messages',
+      meta: {
+        layout: 'main',
+        auth: false
+      },
+      component: () => import(/* webpackChunkName: "about" */ '@/views/chat/Messages.vue')
     }
   ]
 }

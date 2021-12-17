@@ -106,6 +106,11 @@ export default {
         name: 'about',
         text: 'Информация',
         to: '/about'
+      },
+      {
+        name: 'chat',
+        text: 'Чат',
+        to: '/messages'
       }
     ]
 

@@ -31,10 +31,6 @@ requestAxios.interceptors.response.use(response => {
     }
     const text = error.response.data.errors ? message : error.response.data.message
     Message.danger(text)
-    router.replace({
-      path: '/login',
-      query: { redirect: router.currentRoute.fullPath }
-    })
   }
   return Promise.reject(error)
 })

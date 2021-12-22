@@ -21,6 +21,10 @@ export default {
     },
     fillUserApps (state, apps) {
       state.userApps = apps
+    },
+    updateAppInStore (state, app) {
+      const find = state.apps.find(el => el.id === app.id)
+      Object.assign(find, app)
     }
   },
   actions: {
@@ -50,6 +54,14 @@ export default {
         })
         await axios.post('/applications', newApp)
         commit('addApp', newApp)
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async updateApp ({ commit, dispatch }, payload) {
+      try {
+        const { data } = await axios.put(`/applications/${payload.id}`, payload)
+        commit('updateAppInStore', data.data)
       } catch (e) {
         console.log(e)
       }

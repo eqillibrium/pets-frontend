@@ -4,7 +4,7 @@
     style="background-color: #8A8DAF;"
   >
     <div class="row">
-      <div class="col-4" :key="a">
+      <div class="col-4">
         <div class="q-pa-md justify-around" style="max-width: 350px">
           <q-list dense>
             <q-item clickable v-ripple>

@@ -8,7 +8,7 @@
 
         <q-list>
           <q-badge color="orange" floating>{{app.status}}</q-badge>
-          <q-badge :color="!app.executor_user_id ? 'red' : 'green'">{{!app.executor_user_id ? 'Свободно' : 'В работе'}}</q-badge>
+          <q-badge :color="app.executor_user_id ? 'blue' : 'green'">{{app.executor_user_id ? 'В работе' : 'Свободно'}}</q-badge>
             <q-item clickable>
                 <q-item-section avatar>
                     <q-icon color="primary" name="room" />
@@ -42,19 +42,48 @@
                 </q-item-section>
             </q-item>
         </q-list>
-        <q-card-actions>
-            <q-btn flat class="bg-green" color="white">Принять</q-btn>
-            <q-btn flat>Подробнее</q-btn>
+        <q-card-actions class="row">
+            <q-btn flat class="bg-orange" color="white" @click="info" v-if="isCreator">Изменить</q-btn>
+            <q-btn flat class="bg-green" color="white" @click="accept" v-if="!isExecutor && !isCreator">Принять</q-btn>
+            <q-btn flat class="bg-red" color="white" v-if="isExecutor">Отказаться</q-btn>
+            <q-btn flat @click="info">Инфо</q-btn>
         </q-card-actions>
     </q-card>
 </template>
 
 <script>
+// import { computed } from 'vue'
+import { useStore } from 'vuex'
+import { useGetUser } from '@/use/useGetUser'
+import { useIsCreator, useIsExecutor } from '@/use/useRoles'
+
 export default {
   name: 'ListItem',
   props: {
     app: {
       type: Object
+    }
+  },
+  setup (props) {
+    const store = useStore()
+    const user = useGetUser()
+
+    const accept = async () => {
+      try {
+        const payload = {
+          id: props.app.id,
+          executor_user_id: user.value.id
+        }
+        await store.dispatch('apps/updateApp', payload)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    return {
+      ...useIsCreator(props.app),
+      ...useIsExecutor(props.app),
+      info: () => { console.log(props.app) },
+      accept
     }
   }
 }

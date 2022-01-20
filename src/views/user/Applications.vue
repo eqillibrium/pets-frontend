@@ -1,111 +1,56 @@
 <template>
   <div class="row">
-    <div class="col-3">
-      <div class="q-pa-md">
-        <q-list
-          bordered padding
-          class="rounded-borders text-primary"
-        >
-
-          <!--      <q-separator spaced />-->
-
-          <q-item
-            clickable
-            v-ripple
-            active-class="my-menu-link"
-          >
-            <q-item-section avatar>
-              <q-icon name="apps" />
-            </q-item-section>
-
-            <q-item-section>
-              Все заявки</q-item-section>
-            <q-badge color="blue">
-              {{ apps.length }}
-            </q-badge>
-          </q-item>
-
-          <q-item
-            class="text-green"
-            clickable
-            v-ripple
-            active-class="my-menu-link"
-          >
-            <q-item-section
-              avatar
-            >
-              <q-icon
-                name="directions_run"
-              />
-            </q-item-section>
-
-            <q-item-section>Активные</q-item-section>
-          </q-item>
-
-          <q-item
-            class="text-orange"
-            clickable
-            v-ripple
-            active-class="my-menu-link"
-          >
-            <q-item-section
-              avatar
-            >
-              <q-icon
-                name="wrong_location"
-              />
-            </q-item-section>
-
-            <q-item-section>Отмененные</q-item-section>
-          </q-item>
-
-        </q-list>
-      </div>
-    </div>
+    <AppSidebar :count="apps.length"/>
     <div class="col-9">
-      <div class="q-pa-md q-gutter-sm">
-        <q-breadcrumbs class="text-brown">
-          <template v-slot:separator>
-            <q-icon
-              size="1.5em"
-              name="chevron_right"
-              color="primary"
-            />
-          </template>
-
-          <q-breadcrumbs-el label="Главная" icon="home" to="/"/>
-          <q-breadcrumbs-el label="Профиль" icon="settings_accessibility" to="/profile"/>
-          <q-breadcrumbs-el label="Заявки" icon="format_list_bulleted" exact/>
-        </q-breadcrumbs>
-      </div>
+      <AppBreadcrumbs class="q-pt-md q-pl-md q-gutter-sm" />
       <AppList :apps="apps" v-if="!loading"/>
-      <div class="q-pa-md" v-else>
-        <div class="q-gutter-md row items-center justify-center q-mt-xl">
-          <q-spinner-cube
-            size="25%"
-            color="primary"
-          />
-        </div>
+      <div class="q-pa-lg flex flex-center" v-if="!loading">
+        <PaginatorDropdown
+          :default-first-size="config.size"
+          @set-size="setSize"
+        />
+        <q-pagination
+          color="secondary"
+          v-model="config.pageNumber"
+          :max="pageCount"
+          direction-links
+        >
+        </q-pagination>
       </div>
+      <AppCubeLoader v-else/>
     </div>
   </div>
 </template>
 
 <script>
-import AppList from '../../components/list/AppList'
+import { computed, onBeforeMount, reactive, ref } from 'vue'
 import { useStore } from 'vuex'
-import { computed, onBeforeMount, ref } from 'vue'
+import { usePaginator } from '@/use/usePaginator'
+import AppList from '../../components/list/AppList'
+import AppSidebar from '../../components/sidebar/AppSidebar'
+import PaginatorDropdown from '@/components/pagination/PaginatorDropdown'
+import AppBreadcrumbs from '@/components/breadcrumbs/AppBreadcrumbs'
+import AppCubeLoader from '@/components/loaders/AppCubeLoader'
 
 export default {
   name: 'Applications',
   components: {
-    AppList
+    AppBreadcrumbs,
+    AppList,
+    PaginatorDropdown,
+    AppSidebar,
+    AppCubeLoader
   },
   setup () {
     const store = useStore()
 
     const loading = ref(false)
     const apps = computed(() => store.getters['apps/getUserApps'])
+    const config = reactive({ pageNumber: 1, size: 4 })
+    const paginator = usePaginator(apps, config)
+    const pageCount = paginator.pageCount
+    const paginatedData = paginator.paginatedData
+
     onBeforeMount(async () => {
       try {
         loading.value = true
@@ -116,7 +61,13 @@ export default {
     })
     return {
       apps,
-      loading
+      config,
+      loading,
+      pageCount,
+      paginatedData,
+      setSize: val => {
+        config.size = val
+      }
     }
   }
 }

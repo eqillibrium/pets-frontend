@@ -1,0 +1,19 @@
+$text-color: #268aa6;
+$text-color-secondary: dimgrey;
+
+body {
+  color: $text-color-secondary;
+}
+
+.header {
+  color: $text-color;
+}
+
+.text-color {
+  color: $text-color;
+}
+
+.footer {
+  color: dimgrey;
+  background: #f5f5f5;
+}

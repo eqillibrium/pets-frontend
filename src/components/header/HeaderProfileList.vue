@@ -8,11 +8,11 @@
       <q-item
         clickable
         v-close-popup
-        exact
+        active-class="bg-green-2"
         to="/profile"
       >
         <q-item-section avatar>
-          <q-avatar icon="person" color="primary" text-color="white" />
+          <q-avatar icon="person" color="secondary" text-color="white" />
         </q-item-section>
         <q-item-section
         >
@@ -27,6 +27,7 @@
       <q-item
         clickable
         v-close-popup
+        active-class="bg-green-2"
         :to="{ name: 'UserApps'}"
       >
         <q-item-section avatar>

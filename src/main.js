@@ -6,6 +6,7 @@ import store from './store'
 import { Quasar } from 'quasar'
 import quasarUserOptions from './quasar-user-options'
 import YmapPlugin from 'vue-yandex-maps'
+import './styles/theme.scss'
 
 const settings = {
   apiKey: '',

@@ -38,11 +38,11 @@
 
             <q-item-section>Заявки</q-item-section>
           </q-item>
-
         </q-list>
       </div>
     </div>
-    <div class="col-8">
+    <div class="col">
+      <AppBreadcrumbs class="q-pt-md q-pl-md q-gutter-sm" />
       <div class="q-pa-md d-flex">
         <q-table
           title="Список пользователей"
@@ -53,14 +53,7 @@
           v-if="!loading"
           @row-click="getData"
         />
-        <div class="q-pa-md" v-else>
-          <div class="q-gutter-md row items-center justify-center q-mt-xl">
-            <q-spinner-cube
-              size="25%"
-              color="primary"
-            />
-          </div>
-        </div>
+        <AppCubeLoader v-else/>
       </div>
     </div>
   </div>
@@ -68,9 +61,12 @@
 
 <script>
 import { ref, onBeforeMount } from 'vue'
+import AppCubeLoader from '@/components/loaders/AppCubeLoader'
+import AppBreadcrumbs from '@/components/breadcrumbs/AppBreadcrumbs'
 
 export default {
   name: 'Admin.vue',
+  components: { AppBreadcrumbs, AppCubeLoader },
   setup () {
     const loading = ref(false)
     const columns = [

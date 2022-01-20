@@ -1,9 +1,5 @@
 <template >
-  <q-footer
-    reveal
-    style="background-color: #8A8DAF;"
-  >
-    <div class="row">
+    <q-footer reveal class="row footer">
       <div class="col-4">
         <div class="q-pa-md justify-around" style="max-width: 350px">
           <q-list dense>
@@ -19,8 +15,7 @@
           </q-list>
         </div>
       </div>
-    </div>
-  </q-footer>
+    </q-footer>
 </template>
 
 <script>

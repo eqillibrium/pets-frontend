@@ -1,11 +1,31 @@
 <template>
-  <q-page>
-  </q-page>
+  <nav>
+    <q-breadcrumbs class="text-brown">
+      <template v-slot:separator>
+        <q-icon
+          size="1.5em"
+          name="chevron_right"
+          color="secondary"
+        />
+      </template>
+
+      <q-breadcrumbs-el
+        :label="route.name"
+        :icon="route.icon"
+        :to="route.to"
+        class="text-secondary"
+        v-for="route in routes"
+        :key="route"
+        exact
+      />
+    </q-breadcrumbs>
+  </nav>
 </template>
 
 <script>
 import { ref, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
+
 export default {
   setup () {
     const route = useRoute()

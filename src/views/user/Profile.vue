@@ -7,20 +7,7 @@
           v-if="!loading"
           flat
         >
-          <div class="q-pa-md q-gutter-sm">
-            <q-breadcrumbs class="text-brown">
-              <template v-slot:separator>
-                <q-icon
-                  size="1.5em"
-                  name="chevron_right"
-                  color="primary"
-                />
-              </template>
-
-              <q-breadcrumbs-el label="Home" icon="home" to="/"/>
-              <q-breadcrumbs-el label="Profile" icon="widgets" to="/profile" exact/>
-            </q-breadcrumbs>
-          </div>
+          <AppBreadcrumbs class="q-pt-md q-pl-md q-gutter-sm" />
           <q-toolbar class="bg-primary text-white shadow-2">
             <q-toolbar-title>Профиль пользователя: {{ user.name }}</q-toolbar-title>
           </q-toolbar>
@@ -114,14 +101,7 @@
 
           </q-list>
         </q-card>
-        <div class="q-pa-md" v-else>
-          <div class="q-gutter-md row items-center justify-center q-mt-xl">
-            <q-spinner-cube
-              size="25%"
-              color="primary"
-            />
-          </div>
-        </div>
+        <AppCubeLoader v-else/>
       </div>
     </div>
   </div>
@@ -130,9 +110,15 @@
 <script>
 import { ref, computed, onBeforeMount } from 'vue'
 import { useStore } from 'vuex'
+import AppBreadcrumbs from '@/components/breadcrumbs/AppBreadcrumbs'
+import AppCubeLoader from '@/components/loaders/AppCubeLoader'
 
 export default {
   name: 'Admin.vue',
+  components: {
+    AppCubeLoader,
+    AppBreadcrumbs
+  },
   setup () {
     const store = useStore()
 

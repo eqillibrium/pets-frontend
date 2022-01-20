@@ -7,7 +7,9 @@
     <TheFooter />
   </q-layout>
 </template>
+<style>
 
+</style>
 <script>
 import TheHeader from '../components/header/TheHeader.vue'
 import TheFooter from '../components/footer/TheFooter.vue'

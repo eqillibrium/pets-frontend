@@ -1,13 +1,11 @@
 <template>
-  <div class="q-pa-md row q-gutter-xl content-center justify-center">
-    <q-intersection
-      transition="fade"
-      class="col-2 example-item"
+    <div
+        transition="fade"
+      class="example-item"
       v-for="app in apps"
       :key="app.id">
       <ListItem :app="app"/>
-    </q-intersection>
-  </div>
+    </div>
 </template>
 
 <script>
